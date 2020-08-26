@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/tweets_data.dart';
 
 class TweetBuilder extends StatelessWidget {
-  const TweetBuilder(
-      {@required this.width,
-      @required this.height,
-      @required this.image,
-      @required this.name,
-      @required this.userName});
+  const TweetBuilder({
+    @required this.width,
+    @required this.height,
+    @required this.image,
+    @required this.name,
+    @required this.userName,
+  });
 
   final double width;
   final double height;
@@ -62,7 +65,7 @@ class TweetBuilder extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        '@${userName}',
+                        '@$userName',
                         style: TextStyle(
                           color: kGrey,
                           fontSize: 16,

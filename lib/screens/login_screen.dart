@@ -1,18 +1,33 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/constants.dart';
 import 'package:twitter_clone/screens/main_screen.dart';
 import 'package:twitter_clone/widgets/info_textField.dart';
 import 'package:twitter_clone/widgets/rounded_button.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static const id = 'login screen';
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _auth = FirebaseAuth.instance;
+
+  String email, password;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: kDarkBlue,
-      body: SingleChildScrollView(
-        child: Column(
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      child: Scaffold(
+        backgroundColor: kDarkBlue,
+        body: Column(
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(top: 30),
@@ -48,68 +63,78 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 20,
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Log in to Twitter',
+                        style: kHeadingStyle,
+                      ),
+                      SizedBox(
+                        height: 45,
+                      ),
+                      InfoTextField(
+                        hintText: 'Phone, email or username',
+                        onChanged: (value) {
+                          email = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      InfoTextField(
+                        hintText: 'Password',
+                        onChanged: (value) {
+                          password = value;
+                        },
+                        obscureText: true,
+                      ),
+                      SizedBox(
+                        height: 80,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            Text(
-              'Log in to Twitter',
-              style: kHeadingStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                RoundedButton(
+                  width: 60,
+                  height: 32,
+                  borderRadius: 20,
+                  text: 'Log in',
+                  fonWeight: FontWeight.w700,
+                  fontSize: 12,
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    try {
+                      final user = await _auth.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      if (user != null) {
+                        Navigator.pushNamed(context, MainScreen.id);
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                    setState(() {
+                      isLoading = false;
+                    });
+                  },
+                ),
+              ],
             ),
-            SizedBox(
-              height: 45,
-            ),
-            InfoTextField(
-              hintText: 'Phone, email or username',
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            InfoTextField(
-              hintText: 'Password',
-            ),
-            SizedBox(
-              height: 80,
-            ),
-            RoundedButton(
-              width: 275,
-              height: 41,
-              borderRadius: 20,
-              text: 'Log in',
-              fonWeight: FontWeight.w700,
-              fontSize: 15,
-              onPressed: () {
-                Navigator.pushNamed(context, MainScreen.id);
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-            )
           ],
         ),
       ),
     );
   }
 }
-
-//showOverlay(BuildContext context) {
-//  if (overlayEntry != null) return;
-//  OverlayState overlayState = Overlay.of(context);
-//  overlayEntry = OverlayEntry(
-//    builder: (context) {
-//      return Positioned(
-//          bottom: MediaQuery.of(context).viewInsets.bottom,
-//          right: 0.0,
-//          left: 0.0,
-//          child: RoundedButton(
-//              width: 275,
-//              height: 41,
-//              borderRadius: 20,
-//              text: 'Log in',
-//              fonWeight: FontWeight.w700,
-//              fontSize: 15,
-//              onPressed: () {
-//                Navigator.pushNamed(context, MainScreen.id);
-//                FocusScope.of(context).requestFocus(FocusNode());
-//              }));
-//    },
-//  );
-//  overlayState.insert(overlayEntry);
-//}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter_clone/hashtag.dart';
 import 'tweet.dart';
 import 'constants.dart';
 
@@ -9,27 +10,39 @@ class TweetsData extends ChangeNotifier {
       profileImage: 'images/newUser1.jpg',
     ),
     Tweet(
-      name: 'jessica',
+      name: 'Jessica',
       profileImage: 'images/newUser2.jpg',
     ),
     Tweet(
-      name: 'umerfyzer',
+      name: 'Mark',
       profileImage: 'images/newUser3.jpg',
-    )
+    ),
+    Tweet(
+      name: 'Jessica',
+      profileImage: 'images/newUser2.jpg',
+    ),
   ];
 
-  List<Tweet> hashtags = [
-    Tweet(
-      name: 'John',
-      profileImage: 'images/newUser1.jpg',
+  List<HashTag> hashtags = [
+    HashTag(
+      name: '#BLM',
+      tweets: '3026',
     ),
-    Tweet(
-      name: 'jessica',
-      profileImage: 'images/newUser2.jpg',
+    HashTag(
+      name: '#jungkook',
+      tweets: '977k',
     ),
-    Tweet(
-      name: 'umerfyzer',
-      profileImage: 'images/newUser3.jpg',
-    )
+    HashTag(
+      name: '#Pride',
+      tweets: '5909',
+    ),
+    HashTag(
+      name: '#Fiverr',
+      tweets: '34.9k',
+    ),
+    HashTag(
+      name: '#Yess',
+      tweets: '49.6k',
+    ),
   ];
 }
